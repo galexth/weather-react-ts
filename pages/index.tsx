@@ -1,11 +1,9 @@
-import Modal from "@components/modal/Modal";
 import Tabs from "@components/tabs/Tabs";
 import Spinner from "@components/ui/Spinner";
 import Weather from "@components/weather/Weather";
 import { cities as citiesData, City } from "data/cities";
 import { useFetchDataQuery } from "features/weather/weather-api-slice";
 import moment from "moment";
-import { useEffect } from "react";
 import { useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
@@ -14,8 +12,7 @@ import type { NextPage } from "next";
 const Home: NextPage = () => {
   const [date, setDate] = useState<Date>(moment().startOf("day").toDate());
   const [cities, setCities] = useState(citiesData);
-  const [isOpenModal, setIsOpenModal] = useState(false);
-  const { lat, lon } = cities.find((i) => i.active);
+  const { lat, lon } = cities.find((i) => i.active)!;
   const { data, error, isFetching } = useFetchDataQuery({
     lat,
     lon,
@@ -35,20 +32,8 @@ const Home: NextPage = () => {
     setDate(value);
   };
 
-  useEffect(() => {
-    if (error) {
-      setIsOpenModal(true);
-    }
-  }, [error]);
-
   return (
     <div className="p-4 md:p-8 max-w-screen-lg">
-      {isOpenModal && (
-        <Modal
-          text={error.data?.message || "Error"}
-          onClose={() => setIsOpenModal(false)}
-        />
-      )}
       <h1 className="text-3xl font-bold">Weather App</h1>
       <Tabs cities={cities} onTabChange={handleTabChange} />
       <div className="flex flex-nowrap flex-col md:flex-row justify-between items-center md:items-start p-4 md:p-8">
