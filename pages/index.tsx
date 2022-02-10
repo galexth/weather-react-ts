@@ -8,13 +8,11 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import type { NextPage } from "next";
 import { useSelector } from "react-redux";
-import { RootState } from "app/store";
+import { getActiveLocation } from "features/location/selectors";
 
 const Home: NextPage = () => {
   const [date, setDate] = useState<Date>(moment().startOf("day").toDate());
-  const { lat, lon } = useSelector(
-    (state: RootState) => state.location.locations.find((i) => i.active)!
-  );
+  const { lat, lon } = useSelector(getActiveLocation);
   const { data, error, isFetching } = useFetchDataQuery({
     lat,
     lon,
