@@ -1,4 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
+import locationReducer from "features/location/location-slice";
 import modalReducer from "features/modal/modal-slice";
 import { apiSlice } from "features/weather/weather-api-slice";
 import { queryMiddleware } from "middlewares/queryMiddleware";
@@ -7,6 +8,7 @@ export const store = configureStore({
   reducer: {
     [apiSlice.reducerPath]: apiSlice.reducer,
     modal: modalReducer,
+    location: locationReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(apiSlice.middleware, queryMiddleware),

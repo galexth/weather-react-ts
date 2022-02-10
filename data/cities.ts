@@ -1,3 +1,5 @@
+import { City } from "features/location/location-slice";
+
 const cities: Array<City> = [
   {
     id: "london",
@@ -42,13 +44,5 @@ const cities: Array<City> = [
     active: false,
   },
 ];
-
-export type City = {
-  id: string;
-  lat: number;
-  lon: number;
-  label: string;
-  active: boolean;
-};
 
 export { cities };

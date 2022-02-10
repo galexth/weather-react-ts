@@ -1,18 +1,17 @@
-import { City } from "data/cities";
-import { MouseEventHandler } from "react";
+import { City } from "features/location/location-slice";
 
 type Props = {
   city: City;
-  onChange: (city: City) => void;
+  onChange: (id: string) => void;
 };
 
 export default function Tab({ city, onChange }: Props) {
   return (
-    <li key={city.label} className={`tab ${city.active ? "active" : ""}`}>
+    <li className={`tab ${city.active ? "active" : ""}`}>
       <button
         role="tab"
         className="block w-full leading-10 md:px-4"
-        onClick={() => onChange(city)}
+        onClick={() => onChange(city.id)}
       >
         {city.label}
       </button>

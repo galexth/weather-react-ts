@@ -1,17 +1,18 @@
-import { City } from "data/cities";
-import { MouseEventHandler } from "react";
+import { RootState } from "app/store";
+import { setLocation } from "features/location/location-slice";
+import { useDispatch, useSelector } from "react-redux";
 import Tab from "./Tab";
 
-type Props = {
-  cities: City[];
-  onTabChange: (city: City) => void;
-};
+export default function Tabs() {
+  const locations = useSelector((state: RootState) => state.location.locations);
+  const dispatch = useDispatch();
 
-export default function Tabs({ cities, onTabChange }: Props) {
+  const handleTabChange = (cityId: string) => dispatch(setLocation(cityId));
+
   return (
     <ul className="grid grid-cols-3 md:flex md:flex-wrap border-b border-gray-200 dark:border-gray-700 mt-10">
-      {cities.map((city) => (
-        <Tab key={city.label} city={city} onChange={onTabChange} />
+      {locations.map((city) => (
+        <Tab key={city.label} city={city} onChange={handleTabChange} />
       ))}
     </ul>
   );

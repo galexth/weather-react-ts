@@ -1,32 +1,25 @@
 import Tabs from "@components/tabs/Tabs";
 import Spinner from "@components/ui/Spinner";
 import Weather from "@components/weather/Weather";
-import { cities as citiesData, City } from "data/cities";
 import { useFetchDataQuery } from "features/weather/weather-api-slice";
 import moment from "moment";
 import { useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import type { NextPage } from "next";
+import { useSelector } from "react-redux";
+import { RootState } from "app/store";
 
 const Home: NextPage = () => {
   const [date, setDate] = useState<Date>(moment().startOf("day").toDate());
-  const [cities, setCities] = useState(citiesData);
-  const { lat, lon } = cities.find((i) => i.active)!;
+  const { lat, lon } = useSelector(
+    (state: RootState) => state.location.locations.find((i) => i.active)!
+  );
   const { data, error, isFetching } = useFetchDataQuery({
     lat,
     lon,
     ts: moment(date).unix(),
   });
-
-  const handleTabChange = (activeCity: City) => {
-    setCities((prev) =>
-      prev.map((item) => ({
-        ...item,
-        active: item.id === activeCity.id,
-      }))
-    );
-  };
 
   const handleDayChange = (value: Date) => {
     setDate(value);
@@ -35,7 +28,7 @@ const Home: NextPage = () => {
   return (
     <div className="p-4 md:p-8 max-w-screen-lg">
       <h1 className="text-3xl font-bold">Weather App</h1>
-      <Tabs cities={cities} onTabChange={handleTabChange} />
+      <Tabs />
       <div className="flex flex-nowrap flex-col md:flex-row justify-between items-center md:items-start p-4 md:p-8">
         <div className="h-28">
           {data && (
