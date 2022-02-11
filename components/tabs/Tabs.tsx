@@ -1,9 +1,10 @@
 import { RootState } from "app/store";
 import { setLocation } from "features/location/location-slice";
+import { memo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Tab from "./Tab";
 
-export default function Tabs() {
+function Tabs() {
   const locations = useSelector((state: RootState) => state.location.locations);
   const dispatch = useDispatch();
 
@@ -17,3 +18,5 @@ export default function Tabs() {
     </ul>
   );
 }
+
+export default memo(Tabs);
