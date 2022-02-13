@@ -1,10 +1,14 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { WeatherResponse } from "pages/api/weather";
 
-type WeatherRequest = {
+type TimemachineRequest = {
   lat: number;
   lon: number;
   ts: number;
+};
+type FutureRequest = {
+  lat: number;
+  lon: number;
 };
 
 export const apiSlice = createApi({
@@ -15,7 +19,7 @@ export const apiSlice = createApi({
   keepUnusedDataFor: 100,
   endpoints(builder) {
     return {
-      fetchData: builder.query<WeatherResponse, WeatherRequest>({
+      fetchData: builder.query<WeatherResponse, TimemachineRequest>({
         query: ({ lat, lon, ts }) => {
           return {
             url: "",
@@ -27,8 +31,32 @@ export const apiSlice = createApi({
           };
         },
       }),
+      timemachine: builder.query<WeatherResponse, TimemachineRequest>({
+        query: ({ lat, lon, ts }) => {
+          return {
+            url: "timemachine",
+            params: {
+              lat: lat,
+              lon: lon,
+              ts: ts,
+            },
+          };
+        },
+      }),
+      future: builder.query<WeatherResponse, FutureRequest>({
+        query: ({ lat, lon }) => {
+          return {
+            url: "future",
+            params: {
+              lat: lat,
+              lon: lon,
+            },
+          };
+        },
+      }),
     };
   },
 });
 
-export const { useFetchDataQuery } = apiSlice;
+export const { useFetchDataQuery, useFutureQuery, useTimemachineQuery } =
+  apiSlice;

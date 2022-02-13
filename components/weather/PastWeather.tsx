@@ -10,16 +10,18 @@ type Props = {
   date: any;
 };
 
-export default function Weather({ date }: Props) {
+export default function PastWeather({ date }: Props) {
   const { lat, lon } = useSelector(getActiveLocation);
-  const { data, error, isFetching } = useTimemachineQuery(
-    {
-      lat,
-      lon,
-      ts: moment(date).unix(),
-    },
-    { skip: moment(date).isSameOrAfter(new Date(), "day") }
-  );
+  const { data, error, isFetching } = useTimemachineQuery({
+    lat,
+    lon,
+    ts: moment(date).unix(),
+  });
+
+  if (data) {
+    const first = data.hourly[0];
+    const last = data.hourly[data.hourly.length - 1];
+  }
 
   return (
     <div className="flex">
@@ -28,16 +30,18 @@ export default function Weather({ date }: Props) {
         <Fragment>
           <div className="pr-4">
             <Image
-              src={`https://openweathermap.org/img/wn/${data.icon}@2x.png`}
-              alt={data.description}
+              src={`https://openweathermap.org/img/wn/${data.current.weather[0].icon}@2x.png`}
+              alt={data.current.weather[0].description}
               width={100}
               height={100}
             />
           </div>
           <div>
-            <div className="text-2xl">{data.temp} &#8451;</div>
-            <div className="text-xl">{data.title}</div>
-            <div className="text-sm">{data.description}</div>
+            <div className="text-2xl">
+              {Math.round(first.temp)} ... {Math.round(last.temp)} &#8451;
+            </div>
+            <div className="text-xl">{data.current.weather[0].title}</div>
+            <div className="text-sm">{data.current.weather[0].description}</div>
           </div>
         </Fragment>
       )}

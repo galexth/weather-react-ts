@@ -30,7 +30,7 @@ export default async function handler(
   };
 
   if (moment.unix(ts).isSameOrAfter(new Date(), "day")) {
-    params.params.exclude = ["minutely", "hourly", "alerts"].join(",");
+    params.params.exclude = ["minutely", "alerts"].join(",");
   } else {
     url = "/timemachine";
     params.params.dt = ts;
@@ -41,6 +41,8 @@ export default async function handler(
 
     const requestDate = moment.unix(ts);
     let temp = data.current.temp;
+
+    console.log(data);
 
     if (data.daily) {
       const weather = data.daily.find(({ dt }) =>
